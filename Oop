@@ -1,0 +1,102 @@
+using System;
+
+namespace ConsoleApplication2
+{
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Console.Write("Enter units consumed : ");
+            int units = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Are you tax payer (Y/N) : ");
+            char taxPayer = Convert.ToChar(Console.ReadLine());
+            Console.Write("Your property is Residential or Commercial (R/C) : ");
+            char property = Convert.ToChar(Console.ReadLine());
+
+            if (property == 'R' || property == 'r')
+            {
+                ResidentialBill billCalculatorResidential = new ResidentialBill()
+                {
+                    UserUnits = units,
+                    IsTaxPayer = taxPayer,
+                    FirstSlab = 5,
+                    SecondSlab = 17,
+                    ThirdSlab = 23,
+                    FourthSlab = 69,
+                    Tax = 0.13
+                };
+                double billResidential = billCalculatorResidential.Calculator();
+                Console.Write("Your Residential amount of Bill is : " + billResidential + " Rs");
+            }
+            else
+            {
+                CommercialBill billCalculatorCommercial = new CommercialBill()
+                {
+                    UserUnits = units,
+                    IsTaxPayer = taxPayer,
+                    FirstSlab = 5,
+                    SecondSlab = 21,
+                    ThirdSlab = 23,
+                    FourthSlab = 79,
+                    Tax = 0.17
+                };
+                double billCommercial = billCalculatorCommercial.Calculator();
+                Console.Write("Your Commercial amount of Bill is : " + billCommercial + " Rs");
+            }
+            Console.ReadLine();
+        }
+
+    }
+}
+
+
+public class ResidentialBill
+    {
+        public int UserUnits { get; set; }
+        public char IsTaxPayer { get; set; }
+        public int FirstSlab { get; set; }
+        public int SecondSlab { get; set; }
+        public int ThirdSlab { get; set; }
+        public int FourthSlab { get; set; }
+        public double Tax { get; set; }
+        double amount;
+
+        public double Calculator()
+        {
+            if (IsTaxPayer == 'Y' || IsTaxPayer == 'y')
+            {
+                if (UserUnits > 200 && UserUnits <= 500)
+                {
+                    amount = (100 * FirstSlab) + (100 * SecondSlab) + ((UserUnits - 200) * SecondSlab);
+                    amount = amount + (amount * Tax);
+                }
+                return amount;
+            }
+            else
+            {
+                if (UserUnits <= 100)
+                {
+                    amount = (UserUnits * FirstSlab);
+                    amount = amount + (amount * Tax);
+                }
+                else if (UserUnits > 100 && UserUnits <= 200)
+                {
+                    amount = (100 * FirstSlab) + ((UserUnits - 100) * SecondSlab);
+                    amount = amount + (amount * Tax);
+                }
+                else if (UserUnits > 200 && UserUnits <= 500)
+                {
+                    amount = (100 * FirstSlab) + (100 * SecondSlab) + ((UserUnits - 200) * ThirdSlab);
+                    amount = amount + (amount * Tax);
+                }
+                else if (UserUnits > 500)
+                {
+                    amount = (100 * FirstSlab) + (100 * SecondSlab) + (300 * ThirdSlab) + ((UserUnits - 500) * FourthSlab);
+                    amount = amount + (amount * Tax);
+                }
+                return amount;
+            }
+        }
+
+    }
